@@ -11,8 +11,6 @@ boolean buzzerRinging = false; //μεταβλητή που αντιπροσωπ�
 SR04 sensor1, sensor2; //dilwse tis metavlites sonarLeft, sonarRight kai sonarFront pou antiproswpevoun tous iperixous
 
 int kapaki = 1; //Το καπάκι που πρέπει να ανοιχτεί από το χρήστη
-int distance1 = 0;
-int distance2 = 0;
 const int SENSOR_1_TRIGGER = 4; //trigger του αριστερού υπέρηχου
 const int SENSOR_1_ECHO = 5; //echo του αριστερού υπέρηχου
 const int SENSOR_2_TRIGGER = A0; //trigger του δεξιού υπέρηχου
@@ -26,6 +24,8 @@ void setup() {
   sensor1.attach(SENSOR_1_TRIGGER, SENSOR_1_ECHO); // αρχικοποίησε τον υπέρηχο στα κατάλληλα pins
   sensor2.attach(SENSOR_2_TRIGGER, SENSOR_2_ECHO);
   Serial.begin(9600);
+  int distance1 = sensor1.getDistance;
+  int distance2 = sensor2.getDistance;
 }
 /*--------------------- */
 
@@ -47,13 +47,15 @@ void loop() {
       delay(200);
     }
     int currentDistance1 = sensor1.getDistance();
-    /*Serial.println(currentDistance1);*/
+    Serial.println(currentDistance1);
+    
     if (distance1 != currentDistance1) {
       digitalWrite(ledOnePin, LOW);
       noTone(buzzerPin);
       buzzerRinging = false;
       //Αύξησε την τιμή της μεταβλητής kapaki κατά ένα. Δηλαδή η μεταβλητή kapaki να γίνει ότι ήταν πριν συν 1.
       kapaki = kapaki + 1;
+      distance1 = currentDistance1;
     }
     //ΑΝ η μεταβλητή kapaki είναι ίση με το 2 (δλδ εάν πρέπει να ανοίξουμε το δεύτερο καπάκι)
     if (kapaki == 2) {
@@ -62,12 +64,14 @@ void loop() {
       tone(buzzerPin, 1000);
       buzzerRinging = true;
     }
+    
     int currentDistance2 = sensor2.getDistance();
     if (distance2 != currentDistance2) {
       Serial.println(currentDistance2);
       digitalWrite(ledTwoPin, LOW);
       noTone(buzzerPin);
       buzzerRinging = false;
+      distance2 = currentDistance2;
       //ΑΝ το kapaki είναι μεγαλύτερο από το 2 (προς το παρόν έχουμε μόνο τρία καπάκια)
       if (kapaki >= 2) {
         //Αποθήκευσε στη μεταβλητή kapaki την τιμή 1 (δηλαδή να ξεκινήσει από την αρχή)
@@ -77,4 +81,4 @@ void loop() {
       previousTime = currentTime;
     }
   }
-}
+
