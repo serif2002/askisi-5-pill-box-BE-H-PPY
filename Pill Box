@@ -16,6 +16,9 @@ const int SENSOR_1_ECHO = 5; //echo του αριστερού υπέρηχου
 const int SENSOR_2_TRIGGER = A0; //trigger του δεξιού υπέρηχου
 const int SENSOR_2_ECHO = A1; //echo του δεξιού υπέρηχου
 
+int distance1 = 0;
+int distance2 = 0;
+
 void setup() {
   //Θέσε τα pin ως εξόδους και εισόδους αντίστοιχα
   pinMode(ledOnePin, OUTPUT);
@@ -24,8 +27,8 @@ void setup() {
   sensor1.attach(SENSOR_1_TRIGGER, SENSOR_1_ECHO); // αρχικοποίησε τον υπέρηχο στα κατάλληλα pins
   sensor2.attach(SENSOR_2_TRIGGER, SENSOR_2_ECHO);
   Serial.begin(9600);
-  int distance1 = sensor1.getDistance;
-  int distance2 = sensor2.getDistance;
+  distance1 = sensor1.getDistance();
+  distance2 = sensor2.getDistance();
 }
 /*--------------------- */
 
@@ -81,4 +84,4 @@ void loop() {
       previousTime = currentTime;
     }
   }
-
+}
